@@ -1,0 +1,9 @@
+# Devserver alias for Claude Code agents
+# Add this line to your local ~/.zshrc:
+# source ~/path/to/this/file OR copy the alias below
+
+# Replace DEVSERVER with your actual devserver hostname
+alias devserver1="x2ssh -et DEVSERVER.cco0.facebook.com -c '~/start-agents.sh'"
+
+# Example for multiple devservers:
+# alias devserver2="x2ssh -et devvm1234.cco0.facebook.com -c '~/start-agents.sh'"
