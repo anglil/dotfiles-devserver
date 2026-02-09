@@ -1,6 +1,6 @@
 #!/bin/bash
 SESSION="main"
-EDEN_AGENTS="1 2 3"    # These have fbsource Eden mounts
+EDEN_AGENTS="1 2 3 4"  # These have fbsource Eden mounts
 ALL_AGENTS="1 2 3 4 5" # All Claude sessions
 
 # Health check function - runs eden doctor and verifies mounts
