@@ -2,46 +2,28 @@
 SESSION="claude-$(hostname -s)"
 EDEN_AGENTS="1 2 3 4"  # These have fbsource Eden mounts
 ALL_AGENTS="1 2 3 4 5" # All Claude sessions
-
-# Health check function - runs eden doctor and verifies mounts
-check_eden_health() {
-  echo "=== Checking Eden health ==="
-  eden doctor 2>&1
-  for i in $EDEN_AGENTS; do
-    if [[ -L ~/agent$i/README_EDEN.txt ]]; then
-      echo "WARNING: agent$i not mounted, running eden restart..."
-      eden restart --full
-      sleep 10
-      break
-    fi
-  done
-  echo "=== Eden health check complete ==="
-}
-
-# Function to sync repo before starting claude (only for Eden repos)
-sync_repo() {
-  dir=$1
-  echo "=== Syncing $dir ==="
-  cd $dir || return
-  sl pull 2>/dev/null && sl smartlog 2>/dev/null
-  if [[ $(sl status) != "" ]]; then
-    echo "Merge conflicts detected in $dir, attempting auto-resolve..."
-    sl resolve --all --tool :merge-other 2>/dev/null || true
-  fi
-  sl rebase -d stable 2>/dev/null || true
-  echo "=== $dir ready ==="
-}
+SYNC_TIMEOUT=30        # Max seconds per repo sync
 
 # Main execution
 if ! tmux has-session -t $SESSION 2>/dev/null; then
-  check_eden_health
-  
-  echo "Syncing Eden agent repos..."
+  # Quick Eden health check (skip if eden not available)
+  if command -v eden &>/dev/null; then
+    echo "=== Quick Eden check ==="
+    eden doctor 2>&1 || true
+  fi
+
+  # Sync repos with timeout (non-blocking - agents start even if sync fails)
+  echo "Syncing Eden agent repos (${SYNC_TIMEOUT}s timeout per repo)..."
   for i in $EDEN_AGENTS; do
-    (sync_repo ~/agent$i) &
+    ( timeout $SYNC_TIMEOUT bash -c "
+      cd ~/agent$i 2>/dev/null || exit 0
+      sl pull 2>/dev/null
+      sl rebase -d stable 2>/dev/null || true
+      echo \"=== agent$i synced ===\"
+    " || echo "=== agent$i sync skipped (timeout) ===" ) &
   done
   wait
-  echo "All Eden repos synced!"
+  echo "Sync complete!"
 
   # Create tmux session with first window
   tmux new-session -d -s $SESSION -n agent1
