@@ -1,5 +1,5 @@
 #!/bin/bash
-SESSION="main"
+SESSION="claude-$(hostname -s)"
 EDEN_AGENTS="1 2 3 4"  # These have fbsource Eden mounts
 ALL_AGENTS="1 2 3 4 5" # All Claude sessions
 
