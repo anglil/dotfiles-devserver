@@ -1,7 +1,15 @@
 #!/bin/bash
 SESSION="claude-$(hostname -s)"
-EDEN_AGENTS="1 2 3 4"  # These have fbsource Eden mounts
-ALL_AGENTS="1 2 3 4 5" # All Claude sessions
+EDEN_AGENTS="1 2 3 4"
+ALL_AGENTS="1 2 3 4 5"
+
+# Re-mount Eden for all Eden-backed agents (runs every connect)
+for i in $EDEN_AGENTS; do
+  if [ -d "$HOME/agent$i/fbsource" ]; then
+    echo "Fixing Eden redirections for agent$i..."
+    (cd "$HOME/agent$i/fbsource" && edenfsctl redirect fixup) 2>/dev/null || true
+  fi
+done
 
 # Create new session only if it doesn't exist
 if ! tmux has-session -t "$SESSION" 2>/dev/null; then
