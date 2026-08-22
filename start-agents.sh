@@ -3,11 +3,10 @@ SESSION="claude-$(hostname -s)"
 EDEN_AGENTS="1 2 3 4"
 ALL_AGENTS="1 2 3 4 5"
 
-# Re-mount Eden for all Eden-backed agents (runs every connect)
+# Re-mount Eden for all Eden-backed agents (runs every connect, with timeout)
 for i in $EDEN_AGENTS; do
   if [ -d "$HOME/agent$i/fbsource" ]; then
-    echo "Fixing Eden redirections for agent$i..."
-    (cd "$HOME/agent$i/fbsource" && edenfsctl redirect fixup) 2>/dev/null || true
+    timeout 5 bash -c "cd '$HOME/agent$i/fbsource' && edenfsctl redirect fixup" 2>/dev/null || true
   fi
 done
 
