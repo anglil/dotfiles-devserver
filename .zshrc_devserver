@@ -4,3 +4,4 @@
 alias devserver1="x2ssh devvm46739.lla0.facebook.com -t '~/start-agents.sh'"
 alias devserver2="x2ssh devvm30302.nha0.facebook.com -t '~/start-agents.sh'"
 alias devserver3="x2ssh devvm46759.lla0.facebook.com -t '~/start-agents.sh'"
+alias devserver4="x2ssh devvm58685.atn0.facebook.com -t '~/start-agents.sh'"

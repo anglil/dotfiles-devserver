@@ -1,6 +1,6 @@
 # Devserver Dotfiles for Claude Code
 
-Configuration files for running 5 Claude Code agents in tmux across 3 devservers.
+Configuration files for running 5 Claude Code agents in tmux across 4 devservers.
 
 ## Quick Setup
 
@@ -11,6 +11,7 @@ Configuration files for running 5 Claude Code agents in tmux across 3 devservers
    alias devserver1="x2ssh devvm46739.lla0.facebook.com -t '~/start-agents.sh'"
    alias devserver2="x2ssh devvm30302.nha0.facebook.com -t '~/start-agents.sh'"
    alias devserver3="x2ssh devvm46759.lla0.facebook.com -t '~/start-agents.sh'"
+   alias devserver4="x2ssh devvm58685.atn0.facebook.com -t '~/start-agents.sh'"
    ```
 
 2. Install iTerm2 (recommended):
@@ -45,7 +46,7 @@ Configuration files for running 5 Claude Code agents in tmux across 3 devservers
 
 ## Usage
 
-- **Connect:** Run `devserver1` / `devserver2` / `devserver3` in iTerm2
+- **Connect:** Run `devserver1` / `devserver2` / `devserver3` / `devserver4` in iTerm2
 - **Switch agents:** Click tabs or ⌘+1 through ⌘+5
 - **Tab names:** Tabs are named `agent1`–`agent5` and preserved across reconnects
 - **Eden re-mount:** Expired Eden mounts are automatically fixed on every connect
