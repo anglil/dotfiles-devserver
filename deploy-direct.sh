@@ -36,6 +36,7 @@ if ! tmux has-session -t "$SESSION" 2>/dev/null; then
   tmux select-window -t "$SESSION":agent1
 fi
 
+tmux detach-client -t "$SESSION" -a 2>/dev/null || true
 tmux -CC attach -t "$SESSION"
 STARTSCRIPT
 chmod +x ~/start-agents.sh
@@ -62,6 +63,5 @@ set -g display-time 4000
 set -g focus-events on
 TMUXCONF
 
-tmux kill-server 2>/dev/null || true
 echo "=== DEPLOYED on $(hostname -s) ==="
 REMOTE_SCRIPT
