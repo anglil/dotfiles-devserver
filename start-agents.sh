@@ -25,4 +25,5 @@ if ! tmux has-session -t "$SESSION" 2>/dev/null; then
   tmux select-window -t "$SESSION":agent1
 fi
 
+tmux detach-client -t "$SESSION" -a 2>/dev/null || true
 tmux -CC attach -t "$SESSION"
